@@ -47,10 +47,23 @@ def choose_bidder():
     terminal_menu = TerminalMenu(choices, title="Choose the bidder")
     choice_index = terminal_menu.show()
     if choice_index == 0:
-        return schools.fromkeys(schools, [])
+        return choices[choice_index], schools.fromkeys(schools, []), students
     else:
-        return students.fromkeys(students, [])
+        return choices[choice_index], students.fromkeys(students, []), schools
 
-bidder = choose_bidder()
-
+bidder, juliette_dict, romeo_dict = choose_bidder()
 print(bidder)
+
+# romeo_dict = {'Louis': ['ENSEEIHT', 'IMT A', 'ENSIBS'], 'Remi': ['IMT A', 'ENSEEIHT', 'ENSIBS'], 'Jean-Baptiste': ['ENSEEIHT', 'IMT A', 'ENSIBS']}
+
+def stable_mariage():
+    exceeded_capacity = False
+    while (not exceeded_capacity) :
+        for key in romeo_dict:
+            print(key)
+            juliette_dict[romeo_dict[key][0]]
+            exceeded_capacity = True
+
+
+stable_mariage()
+print(juliette_dict)
