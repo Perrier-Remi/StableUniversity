@@ -1,7 +1,8 @@
 import csv
 
+from simple_term_menu import TerminalMenu
+
 csv_file = 'input.csv'
-university = {}
 
 def read_preferences_from_csv():
     students = {}
@@ -38,5 +39,18 @@ def read_preferences_from_csv():
     return students, schools
 
 students, schools = read_preferences_from_csv()
-print(students)
-print(schools)
+students_keys = list(students.keys())
+schools_keys = list(schools.keys())
+
+def choose_bidder():
+    choices = ["Schools", "Students"]
+    terminal_menu = TerminalMenu(choices, title="Choose the bidder")
+    choice_index = terminal_menu.show()
+    if choice_index == 0:
+        return schools.fromkeys(schools, [])
+    else:
+        return students.fromkeys(students, [])
+
+bidder = choose_bidder()
+
+print(bidder)

@@ -9,3 +9,7 @@ Input:
 Output:
  - Student to school assignment
  - Number of rounds needed to converage
+
+
+ this project requires simple-term-menu
+ pip3 install simple-term-menu
