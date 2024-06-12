@@ -11,5 +11,11 @@ Output:
  - Number of rounds needed to converage
 
 
- this project requires simple-term-menu
- pip3 install simple-term-menu
+ this project requires the following libraries:
+- cutie
+- PrettyTable
+
+To install the libraries, run the following command:
+```bash
+pip3 install -r requirements.txt
+```
