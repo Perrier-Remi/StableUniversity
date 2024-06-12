@@ -1,6 +1,7 @@
 from prettytable import PrettyTable
 from Initializer import *
 
+
 # this function removes the least preferred romeo from juliette's list
 def remove_least_pref(juliette):
     # The least preferred student is the last one in the list
@@ -8,20 +9,22 @@ def remove_least_pref(juliette):
     vars.juliette_dict[juliette].remove(least_preferred_romeo)
     return least_preferred_romeo
 
+
 # this function gets the next preferred juliette for the romeo in the parameter
 def get_next_pref_juliette(romeo, juliette):
     preferences = vars.romeo_dict[romeo]
     current_juliette_index = preferences.index(juliette)
-    if (current_juliette_index+1 < len(preferences)) :
+    if current_juliette_index + 1 < len(preferences):
         next_juliette = preferences[current_juliette_index + 1]
         return next_juliette
     # else no juliette want this romeo so he goes home
     else:
         return None
 
+
 def stable_marriage(bidder):
     stable = False
-    while (not stable) :
+    while not stable:
 
         # loop through all the juliettes
         for juliette in vars.juliette_dict:
@@ -39,7 +42,7 @@ def stable_marriage(bidder):
                     # add the least preferred romeo to the next preferred juliette's list
                     vars.juliette_dict[next_pref_juliette].append(least_pref_romeo)
 
-                elif next_pref_juliette: # bidder == "Students"
+                elif next_pref_juliette:  # bidder == "Students"
                     # remove the least preferred romeo from the school enrollments
                     vars.school_enrollments[least_pref_romeo] -= 1
                     # add the least preferred romeo to the next preferred juliette's list until the capacity is reached
@@ -57,6 +60,7 @@ def stable_marriage(bidder):
         else:
             stable = True
 
+
 def displayResults():
     table = PrettyTable()
     table.field_names = list(vars.juliette_dict.keys())
@@ -64,6 +68,7 @@ def displayResults():
     print()
     print("The results are:")
     print(table)
+
 
 if __name__ == "__main__":
     vars = Initializer()
