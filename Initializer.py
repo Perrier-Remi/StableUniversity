@@ -1,18 +1,20 @@
 import cutie
 import csv
 import os
-from operator import itemgetter
+
 
 class Initializer:
     """ A class used to initialize the data for stable marriage algorithm.
     @ivar bidder: The chosen bidder.
     @type bidder: str
-    @ivar capacity: The chosen school capacity.
-    @type capacity: int
     @ivar student_pref: The students' preferences.
     @type student_pref: dict
-    @ivar school_pref: The schools' preferences.
-    @type school_pref: dict
+    @ivar school_capacities: The capacity for each school.
+    @type school_capacities: dict
+    @ivar juliette_pref: The preferences for the juliettes.
+    @type juliette_pref: dict
+    @ivar school_enrollments: The number of students enrolled in each school.
+    @type school_enrollments: dict
     """
 
     def __init__(self):
