@@ -18,7 +18,6 @@ class Initializer:
     def __init__(self):
         """ Initialize all the necessary attributes for the table marriage algorithm. """
         self.bidder = Initializer.chooseBidder()
-        # self.juliette_capacity = self.school_capacity if self.bidder == "Schools" else 1
         self.student_pref, self.school_pref = Initializer.getPreferencesFromCSV(Initializer.chooseCSVFile())
         self.school_capacities = Initializer.chooseSchoolCapacity()
         self.juliette_pref, self.juliette_dict, self.romeo_dict = self.initializeJulietteRomeo()
@@ -36,8 +35,13 @@ class Initializer:
 
     @staticmethod
     def chooseSchoolCapacity():
+        """ Prompts the user to choose the school capacity.
+        @return: The chosen school capacity.
+        @rtype: dict
+        """
         # read the capacities from a CSV file chosen by the user
-        csv_files = [f for f in os.listdir('./assets/capacities') if f.endswith('.csv')]
+        csv_files = sorted([f for f in os.listdir('./assets/capacities') if f.endswith('.csv')])
+
         if not csv_files:
             print("No CSV file found in the current directory")
             print("Please put the CSV file in the current directory and try again")
@@ -55,7 +59,7 @@ class Initializer:
                 school_capacities[headers[idx]] = int(row[idx])
 
         return school_capacities
-        # return cutie.get_number("What are the schools capacities? :", min_value=1, allow_float=False)
+
 
     @staticmethod
     def chooseCSVFile():
@@ -63,7 +67,7 @@ class Initializer:
         @return: The chosen CSV file.
         @rtype: str
         """
-        csv_files = [f for f in os.listdir('./assets/preferences') if f.endswith('.csv')]
+        csv_files = sorted([f for f in os.listdir('./assets/preferences') if f.endswith('.csv')])
         if not csv_files:
             print("No CSV file found in the current directory")
             print("Please put the CSV file in the current directory and try again")
@@ -71,6 +75,7 @@ class Initializer:
             exit()
         print("Choose the CSV file")
         return "./assets/preferences/" + csv_files[cutie.select(csv_files, selected_index=0)]
+
 
     @staticmethod
     def getPreferencesFromCSV(filename):
@@ -108,6 +113,7 @@ class Initializer:
             schools[school] = sorted(schools[school], key=schools[school].get)
 
         return students, schools
+
 
     def initializeJulietteRomeo(self):
         if self.bidder == "Schools":
