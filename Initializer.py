@@ -18,9 +18,9 @@ class Initializer:
     def __init__(self):
         """ Initialize all the necessary attributes for the table marriage algorithm. """
         self.bidder = Initializer.chooseBidder()
-        self.school_capacity = Initializer.chooseSchoolCapacity()
-        self.juliette_capacity = self.school_capacity if self.bidder == "Schools" else 1
+        # self.juliette_capacity = self.school_capacity if self.bidder == "Schools" else 1
         self.student_pref, self.school_pref = Initializer.getPreferencesFromCSV(Initializer.chooseCSVFile())
+        self.school_capacities = Initializer.chooseSchoolCapacity()
         self.juliette_pref, self.juliette_dict, self.romeo_dict = self.initializeJulietteRomeo()
         self.school_enrollments = self.initializeSchoolEnrollments()
 
@@ -36,11 +36,26 @@ class Initializer:
 
     @staticmethod
     def chooseSchoolCapacity():
-        """ Prompts the user to choose the school capacity.
-        @return: The chosen school capacity.
-        @rtype: int
-        """
-        return cutie.get_number("What are the schools capacities? :", min_value=1, allow_float=False)
+        # read the capacities from a CSV file chosen by the user
+        csv_files = [f for f in os.listdir('./assets/capacities') if f.endswith('.csv')]
+        if not csv_files:
+            print("No CSV file found in the current directory")
+            print("Please put the CSV file in the current directory and try again")
+            print("Exiting...")
+            exit()
+        print("Choose the CSV file for the school capacities")
+        capacity_file = "./assets/capacities/" + csv_files[cutie.select(csv_files, selected_index=0)]
+
+        school_capacities = {}
+        with open(capacity_file, newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            headers = next(reader)
+            row = next(reader)
+            for idx in range(0, len(row)):
+                school_capacities[headers[idx]] = int(row[idx])
+
+        return school_capacities
+        # return cutie.get_number("What are the schools capacities? :", min_value=1, allow_float=False)
 
     @staticmethod
     def chooseCSVFile():
@@ -48,14 +63,14 @@ class Initializer:
         @return: The chosen CSV file.
         @rtype: str
         """
-        csv_files = [f for f in os.listdir('./assets') if f.endswith('.csv')]
+        csv_files = [f for f in os.listdir('./assets/preferences') if f.endswith('.csv')]
         if not csv_files:
             print("No CSV file found in the current directory")
             print("Please put the CSV file in the current directory and try again")
             print("Exiting...")
             exit()
         print("Choose the CSV file")
-        return "./assets/" + csv_files[cutie.select(csv_files, selected_index=0)]
+        return "./assets/preferences/" + csv_files[cutie.select(csv_files, selected_index=0)]
 
     @staticmethod
     def getPreferencesFromCSV(filename):
@@ -108,7 +123,7 @@ class Initializer:
             juliette_dict = {
                 student: [
                     school for school in romeo_dict.keys()
-                    if student in romeo_dict[school][:self.school_capacity]
+                    if student in romeo_dict[school][:self.school_capacities[school]]
                 ]
                 for student in self.student_pref
             }
