@@ -12,7 +12,7 @@ def remove_least_pref(juliette):
 
 # this function gets the next preferred juliette for the romeo in the parameter
 def get_next_pref_juliette(romeo, juliette):
-    preferences = vars.romeo_dict[romeo]
+    preferences = vars.romeo_pref[romeo]
     current_juliette_index = preferences.index(juliette)
     if current_juliette_index + 1 < len(preferences):
         next_juliette = preferences[current_juliette_index + 1]
