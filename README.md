@@ -23,6 +23,9 @@ To install the libraries, run the following command:
 pip3 install -r requirements.txt
 ```
 
+dire que c'est à la charge de l'utilisateur que de vérifier que les fichiers csv sont bien formattés
+
+
 ### Usage
 To run the program, run the following command in your terminal:
 ```bash
@@ -111,7 +114,7 @@ an example. With students bidder, here is are the attributes initialized:
 
 ## Todo
  - [ ] rajouter des tests + tests de cas limites
- - [ ] uniformiser les noms des tests
+ - [x] uniformiser les noms des tests
  - [ ] faire le README
  - [ ] faire la doc
  - [ ] expliquer la structure de certaines données (juliette, romeo, getPreferencesFromCSV l.89)

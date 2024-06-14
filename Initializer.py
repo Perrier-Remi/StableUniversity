@@ -43,6 +43,10 @@ class Initializer:
 
     @staticmethod
     def chooseSchoolCapacity():
+        """ Prompts the user to choose the school capacity.
+        @return: The chosen school capacity.
+        @rtype: dict
+        """
         # read the capacities from a CSV file chosen by the user
         csv_files = [f for f in os.listdir('./assets/capacities') if f.endswith('.csv')]
         if not csv_files:
@@ -69,7 +73,7 @@ class Initializer:
         @return: The chosen CSV file.
         @rtype: str
         """
-        csv_files = [f for f in os.listdir('./assets/preferences') if f.endswith('.csv')]
+        csv_files = sorted([f for f in os.listdir('./assets/preferences') if f.endswith('.csv')])
         if not csv_files:
             print("No CSV file found in the current directory")
             print("Please put the CSV file in the current directory and try again")
