@@ -9,10 +9,16 @@ class Initializer:
     @type bidder: str
     @ivar student_pref: The students' preferences.
     @type student_pref: dict
+    @ivar school_pref: The schools' preferences.
+    @type school_pref: dict
     @ivar school_capacities: The capacity for each school.
     @type school_capacities: dict
     @ivar juliette_pref: The preferences for the juliettes.
     @type juliette_pref: dict
+    @ivar juliette_dict: The juliettes' dictionary.
+    @type juliette_dict: dict
+    @ivar romeo_pref: The romeos' dictionary.
+    @type romeo_pref: dict
     @ivar school_enrollments: The number of students enrolled in each school.
     @type school_enrollments: dict
     """
@@ -22,7 +28,7 @@ class Initializer:
         self.bidder = Initializer.chooseBidder()
         self.student_pref, self.school_pref = Initializer.getPreferencesFromCSV(Initializer.chooseCSVFile())
         self.school_capacities = Initializer.chooseSchoolCapacity()
-        self.juliette_pref, self.juliette_dict, self.romeo_dict = self.initializeJulietteRomeo()
+        self.juliette_pref, self.juliette_dict, self.romeo_pref = self.initializeJulietteRomeo()
         self.school_enrollments = self.initializeSchoolEnrollments()
 
     @staticmethod
@@ -42,8 +48,7 @@ class Initializer:
         @rtype: dict
         """
         # read the capacities from a CSV file chosen by the user
-        csv_files = sorted([f for f in os.listdir('./assets/capacities') if f.endswith('.csv')])
-
+        csv_files = [f for f in os.listdir('./assets/capacities') if f.endswith('.csv')]
         if not csv_files:
             print("No CSV file found in the current directory")
             print("Please put the CSV file in the current directory and try again")
@@ -62,7 +67,6 @@ class Initializer:
 
         return school_capacities
 
-
     @staticmethod
     def chooseCSVFile():
         """ Prompts the user to choose the CSV file.
@@ -77,7 +81,6 @@ class Initializer:
             exit()
         print("Choose the CSV file")
         return "./assets/preferences/" + csv_files[cutie.select(csv_files, selected_index=0)]
-
 
     @staticmethod
     def getPreferencesFromCSV(filename):
@@ -116,36 +119,32 @@ class Initializer:
 
         return students, schools
 
-
     def initializeJulietteRomeo(self):
         if self.bidder == "Schools":
-            romeo_dict = self.student_pref.copy()
+            romeo_pref = self.student_pref.copy()
             juliette_dict = {
-                school: [student for student in romeo_dict.keys() if romeo_dict[student][0] == school]
+                school: [student for student in romeo_pref.keys() if romeo_pref[student][0] == school]
                 for school in self.school_pref
             }
             juliette_pref = self.school_pref.copy()
 
         else:
-            romeo_dict = self.school_pref.copy()
+            romeo_pref = self.school_pref.copy()
             juliette_dict = {
                 student: [
-                    school for school in romeo_dict.keys()
-                    if student in romeo_dict[school][:self.school_capacities[school]]
+                    school for school in romeo_pref.keys()
+                    if student in romeo_pref[school][:self.school_capacities[school]]
                 ]
                 for student in self.student_pref
             }
             juliette_pref = self.student_pref.copy()
 
-        return juliette_pref, juliette_dict, romeo_dict
+        return juliette_pref, juliette_dict, romeo_pref
 
 
     def initializeSchoolEnrollments(self):
-        school_enrollments = self.romeo_dict.copy()
-
         # initialize the capacity of each school to 0
-        for school in school_enrollments:
-            school_enrollments[school] = 0
+        school_enrollments = {school: 0 for school in self.romeo_pref.copy()}
 
         # for each school, for every student added to the list, increment the capacity
         for juliette in self.juliette_dict.keys():

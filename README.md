@@ -77,7 +77,58 @@ Student 3, "3,2", "2,2", "1,3"
 *The header row should start with a comma*
 
 *Note that the program **will not** check the validity of the preferences files as well as the capacities and will crash if the files are not correctly formatted.*
+`
+## Initializer class
+`Initializer` allows to initialize the data structure for the first iteration of the marriage algorithm. To better understand 
+the data structure, we will explain the `Initializer` class with scenario 2 (`capacities3.csv` and `preferences3.csv`) as 
+an example. With students bidder, here is are the attributes initialized:
+ - `student_pref`: The students' preferences from `preferences2.csv` with the following format:
+```json
+{
+  "Remi": ["A", "B"],
+  "Louis": ["B", "A"],
+  "Matthieu": ["A", "B"],
+  "Lucas": ["A", "B"],
+  "Jean-Baptiste": ["B", "A"],
+  "Clement": ["A", "B"]
+}
+```
+- `school_pref`: The schools' preferences from `preferences2.csv` with the following format:
+```json
+{
+  "A": ["Remi", "Matthieu", "Jean-Baptiste", "Lucas", "Clement", "Louis"], 
+  "B": ["Remi", "Matthieu", "Lucas", "Jean-Baptiste", "Clement", "Louis"]
+}
+```
+- `school_capacities`: The capacity for each school from `capacities2.csv` with the following format:
+```json
+{
+   "A": 3, 
+   "B": 3
+}
+```
+- `romeo_dict`: The preferences for the romeos' dictionary where is equal to `student_pref` for school bidder or `school_pref` for student bidder. So in our case, it's equals to `school_pref`.
+- `juliette_pref`: The juliettes' preferences where is equal to `student_pref` for student bidder or `school_pref` for school bidder. So in our case, it's equals to `student_pref`.
+- `juliette_dict`: The juliettes' dictionary is the first iteration of the marriage algorithm based on romeo dictionary and school capacities.
+```json
+{
+   "Remi": [], 
+   "Louis": ["B"], 
+   "Matthieu": ["D"], 
+   "Lucas": ["A", "C"]
+}
+```
+- `school_enrollments`: school enrolment at a given time T. So in our case, at the beginning of the algorithm, it's equal to:
+```json
+{
+   "A": 3, 
+   "B": 3
+}
+```
 
-## Main
-
-This file contains the main function of the program. It reads the preferences from the CSV file, creates the students and schools, and runs the stable marriage algorithm.
+## Todo
+ - [ ] rajouter des tests + tests de cas limites
+ - [x] uniformiser les noms des tests
+ - [ ] faire le README
+ - [ ] faire la doc
+ - [ ] expliquer la structure de certaines données (juliette, romeo, getPreferencesFromCSV l.89)
