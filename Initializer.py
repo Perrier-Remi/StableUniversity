@@ -9,10 +9,16 @@ class Initializer:
     @type bidder: str
     @ivar student_pref: The students' preferences.
     @type student_pref: dict
+    @ivar school_pref: The schools' preferences.
+    @type school_pref: dict
     @ivar school_capacities: The capacity for each school.
     @type school_capacities: dict
     @ivar juliette_pref: The preferences for the juliettes.
     @type juliette_pref: dict
+    @ivar juliette_dict: The juliettes' dictionary.
+    @type juliette_dict: dict
+    @ivar romeo_pref: The romeos' dictionary.
+    @type romeo_pref: dict
     @ivar school_enrollments: The number of students enrolled in each school.
     @type school_enrollments: dict
     """
@@ -20,10 +26,9 @@ class Initializer:
     def __init__(self):
         """ Initialize all the necessary attributes for the table marriage algorithm. """
         self.bidder = Initializer.chooseBidder()
-        # self.juliette_capacity = self.school_capacity if self.bidder == "Schools" else 1
         self.student_pref, self.school_pref = Initializer.getPreferencesFromCSV(Initializer.chooseCSVFile())
         self.school_capacities = Initializer.chooseSchoolCapacity()
-        self.juliette_pref, self.juliette_dict, self.romeo_dict = self.initializeJulietteRomeo()
+        self.juliette_pref, self.juliette_dict, self.romeo_pref = self.initializeJulietteRomeo()
         self.school_enrollments = self.initializeSchoolEnrollments()
 
     @staticmethod
@@ -57,7 +62,6 @@ class Initializer:
                 school_capacities[headers[idx]] = int(row[idx])
 
         return school_capacities
-        # return cutie.get_number("What are the schools capacities? :", min_value=1, allow_float=False)
 
     @staticmethod
     def chooseCSVFile():
@@ -113,33 +117,30 @@ class Initializer:
 
     def initializeJulietteRomeo(self):
         if self.bidder == "Schools":
-            romeo_dict = self.student_pref.copy()
+            romeo_pref = self.student_pref.copy()
             juliette_dict = {
-                school: [student for student in romeo_dict.keys() if romeo_dict[student][0] == school]
+                school: [student for student in romeo_pref.keys() if romeo_pref[student][0] == school]
                 for school in self.school_pref
             }
             juliette_pref = self.school_pref.copy()
 
         else:
-            romeo_dict = self.school_pref.copy()
+            romeo_pref = self.school_pref.copy()
             juliette_dict = {
                 student: [
-                    school for school in romeo_dict.keys()
-                    if student in romeo_dict[school][:self.school_capacities[school]]
+                    school for school in romeo_pref.keys()
+                    if student in romeo_pref[school][:self.school_capacities[school]]
                 ]
                 for student in self.student_pref
             }
             juliette_pref = self.student_pref.copy()
 
-        return juliette_pref, juliette_dict, romeo_dict
+        return juliette_pref, juliette_dict, romeo_pref
 
 
     def initializeSchoolEnrollments(self):
-        school_enrollments = self.romeo_dict.copy()
-
         # initialize the capacity of each school to 0
-        for school in school_enrollments:
-            school_enrollments[school] = 0
+        school_enrollments = {school: 0 for school in self.romeo_pref.copy()}
 
         # for each school, for every student added to the list, increment the capacity
         for juliette in self.juliette_dict.keys():
